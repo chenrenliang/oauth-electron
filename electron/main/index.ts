@@ -5,7 +5,7 @@ import { AUTH_IPC } from '../../shared/auth-types'
 import type { AuthMode } from '../../shared/auth-types'
 import { clearSession, getSession, httpRequest, startOAuthFlow } from './auth-service'
 import { buildGitHubOAuthConfig } from './oauth-config'
-import { startTokenRefreshService, stopTokenRefreshService } from './token-refresh-service'
+import { startTokenRefreshService, stopTokenRefreshService, forceExpireAccessToken } from './token-refresh-service'
 
 const isDev = !app.isPackaged
 
@@ -67,6 +67,12 @@ function registerAuthHandlers(): void {
     clearSession()
     broadcastSession(null)
     return null
+  })
+
+  ipcMain.handle(AUTH_IPC.FORCE_EXPIRE, async () => {
+    const session = await forceExpireAccessToken()
+    broadcastSession(session)
+    return session
   })
 }
 

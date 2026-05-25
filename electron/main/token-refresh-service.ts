@@ -114,3 +114,28 @@ async function tickRefresh(): Promise<void> {
     await refreshAccessToken(oauthConfig, httpRequestFn)
   }
 }
+
+/**
+ * Force access_token to expire immediately, then trigger refresh if possible.
+ */
+export async function forceExpireAccessToken(): Promise<AuthSession | null> {
+  const session = getSession()
+  if (!session) return null
+
+  const expired: AuthSession = {
+    ...session,
+    tokens: {
+      ...session.tokens,
+      expires_at: Date.now() - 1000,
+      expires_in: 0
+    }
+  }
+  saveSession(expired)
+  notifySessionChanged(expired)
+
+  if (oauthConfig && httpRequestFn && expired.tokens.refresh_token) {
+    return refreshAccessToken(oauthConfig, httpRequestFn)
+  }
+
+  return expired
+}

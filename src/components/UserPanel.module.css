@@ -110,8 +110,35 @@
   color: #64748b;
 }
 
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.expireButton {
+  flex: 1;
+  padding: 12px 20px;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 10px;
+  background: rgba(245, 158, 11, 0.12);
+  color: #fcd34d;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.expireButton:hover:not(:disabled) {
+  background: rgba(245, 158, 11, 0.22);
+}
+
+.expireButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .logoutButton {
-  width: 100%;
+  flex: 1;
   padding: 12px 20px;
   border: 1px solid rgba(239, 68, 68, 0.4);
   border-radius: 10px;

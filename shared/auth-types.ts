@@ -47,7 +47,8 @@ export const AUTH_IPC = {
   LOGOUT: 'auth:logout',
   GET_SESSION: 'auth:get-session',
   SESSION_CHANGED: 'auth:session-changed',
-  TOKEN_REFRESHED: 'auth:token-refreshed'
+  TOKEN_REFRESHED: 'auth:token-refreshed',
+  FORCE_EXPIRE: 'auth:force-expire'
 } as const
 
 /** Buffer before expiry to proactively refresh tokens (5 minutes) */

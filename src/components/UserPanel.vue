@@ -14,6 +14,7 @@ const emit = defineEmits<{
 }>()
 
 const liveSession = ref<AuthSession>(props.session)
+const expiring = ref(false)
 
 let unsubscribeToken: (() => void) | null = null
 
@@ -42,6 +43,18 @@ function formatExpiry(expiresAt?: number): string {
   const hours = Math.floor(remainingMs / 3600000)
   const minutes = Math.floor((remainingMs % 3600000) / 60000)
   return `${date.toLocaleString()}（剩余 ${hours}h ${minutes}m）`
+}
+
+async function handleForceExpire(): Promise<void> {
+  expiring.value = true
+  try {
+    const updated = await window.authApi.forceExpire()
+    if (updated) {
+      liveSession.value = updated
+    }
+  } finally {
+    expiring.value = false
+  }
 }
 </script>
 
@@ -93,6 +106,17 @@ function formatExpiry(expiresAt?: number): string {
       </p>
     </div>
 
-    <button type="button" :class="styles.logoutButton" @click="emit('logout')">登出</button>
+    <div :class="styles.actions">
+      <button
+        type="button"
+        :class="styles.expireButton"
+        :disabled="expiring || !liveSession.tokens.refresh_token"
+        :title="liveSession.tokens.refresh_token ? '模拟 token 过期并触发自动续期' : '当前账号无 refresh_token，无法测试续期'"
+        @click="handleForceExpire"
+      >
+        {{ expiring ? '处理中...' : '模拟过期' }}
+      </button>
+      <button type="button" :class="styles.logoutButton" @click="emit('logout')">登出</button>
+    </div>
   </section>
 </template>
