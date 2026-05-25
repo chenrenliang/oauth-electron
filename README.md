@@ -1,6 +1,6 @@
-# electron-oauth-react
+# electron-oauth-vue
 
-Electron + electron-vite + React 项目，演示 **GitHub OAuth2** 登录/注册与 **refresh_token 自动续期**。
+Electron + electron-vite + Vue 3 + TypeScript 项目，演示 **GitHub OAuth2** 登录/注册与 **refresh_token 自动续期**。
 
 ## 功能
 
@@ -67,7 +67,9 @@ electron/
 │   ├── github-oauth-client.ts  # GitHub Token 交换 / 刷新
 │   ├── token-refresh-service.ts  # 自动续期调度
 │   └── oauth-config.ts         # 从 .env 读取配置
-src/components/
-├── AuthPanel.tsx               # 登录 / 注册
-└── UserPanel.tsx               # 用户信息 + Token 状态
+src/
+├── App.vue                     # 根组件
+└── components/
+    ├── AuthPanel.vue           # 登录 / 注册
+    └── UserPanel.vue           # 用户信息 + Token 状态
 ```
